@@ -43,4 +43,4 @@ Each folder/file focuses on a specific topic and contains implementations, pract
 
 ---
 
-*"Consistency over intensity — one problem at a time."*
+*"Consistency is what matters, each day everyday."*
