@@ -56,6 +56,7 @@ public:
 
         return temp->endofword;
     }
+
     string getprefix(string key){
         Node* temp = root;
         string prefix = "";
@@ -69,6 +70,22 @@ public:
             temp = temp->children[key[i]];
         }
         return prefix;
+    }
+
+    int countHelper(Node* root){
+        int ans = 0;
+
+        for(pair<char, Node*> child : root->children){
+            ans += countHelper(child.second);
+        }
+
+        return ans + 1;
+    }
+
+    //--------node counter for count unique substr problem----------
+
+    int countNodes(){
+        return countHelper(root);
     }
 };
 
@@ -86,10 +103,29 @@ void prefixproblem(vector<string> dict){
     }
 }
 
-int main(){
-    vector<string> dict = {"zebra", "dog", "duck", "dove"};
-    prefixproblem(dict);
+//---------count unique no of substrings using prefixes of suffix method----
+
+int countuniqueSubstr(string str){
+    Trie trie;
+     for (int i=0; i<str.size(); i++){
+
+        string suffix = str.substr(i);
+        trie.insert(suffix);
+     }
+
+     return trie.countNodes();
 }
+
+int main(){
+    string str = "ababa";
+    cout << countuniqueSubstr(str) << endl;
+    return 0;
+}
+
+// int main(){
+//     vector<string> dict = {"zebra", "dog", "duck", "dove"};
+//     prefixproblem(dict);
+// }
 
 // int main(){
 //     vector<string> words = {"the", "a", "there", "their",
