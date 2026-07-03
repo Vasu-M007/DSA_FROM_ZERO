@@ -11,6 +11,7 @@ class Node{
 public:
     unordered_map<char, Node*> children;
     bool endofword;
+    int freq; 
 
     Node(){
         endofword = false;
@@ -22,6 +23,7 @@ class Trie{
 public:
     Trie(){
         root = new Node();
+        root->freq = -1;
     }
 
     void insert(string key){
@@ -30,8 +32,11 @@ public:
         for (int i=0; i<key.size(); i++){
             if (temp->children.count(key[i]) == 0){
                 temp->children[key[i]] = new Node(); //create an empty node for children
+                temp->children[key[i]]->freq = 1;
             }
-
+            else{
+                temp->children[key[i]]->freq++;
+            }
             temp = temp->children[key[i]];
         }
 
@@ -51,18 +56,52 @@ public:
 
         return temp->endofword;
     }
+    string getprefix(string key){
+        Node* temp = root;
+        string prefix = "";
+
+        for (int i=0; i<key.size(); i++){
+            prefix += key[i];
+            if (temp->children[key[i]]->freq == 1){
+                return prefix;
+            }
+
+            temp = temp->children[key[i]];
+        }
+        return prefix;
+    }
 };
 
-int main(){
-    vector<string> words = {"the", "a", "there", "their",
-    "any", "thee"};
+//-------------shortest unique prefix problem---------------
 
+void prefixproblem(vector<string> dict){
     Trie trie;
 
-    for (int i=0; i<words.size(); i++){
-        trie.insert(words[i]);
+    for (int i=0; i<dict.size(); i++){
+        trie.insert(dict[i]);
     }
 
-    cout << trie.search("there") << endl;
-    return 0;
+    for (int i=0; i<dict.size(); i++){
+        cout << trie.getprefix(dict[i]) << " " << endl;
+    }
 }
+
+int main(){
+    vector<string> dict = {"zebra", "dog", "duck", "dove"};
+    prefixproblem(dict);
+}
+
+// int main(){
+//     vector<string> words = {"the", "a", "there", "their",
+//     "any", "thee"};
+
+//     Trie trie;
+
+//     for (int i=0; i<words.size(); i++){
+//         trie.insert(words[i]);
+//     }
+
+
+//     cout << trie.search("there") << endl;
+//     return 0;
+// }
