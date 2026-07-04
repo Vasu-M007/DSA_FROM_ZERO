@@ -87,6 +87,30 @@ public:
     int countNodes(){
         return countHelper(root);
     }
+
+    //----------helper and function for longest word with all prefixes problem----
+
+    void longesthelper(Node* root, string &ans, string temp){
+        for (pair<char, Node*> child : root->children){
+            if (child.second->endofword){
+                temp += child.first;
+
+                if ((temp.size() == ans.size() && temp < ans) || temp.size() > ans.size()){
+                    ans = temp;
+                }
+
+                longesthelper(child.second, ans, temp);
+                temp = temp.substr(0, temp.size() - 1);
+            }
+        }
+    }
+
+    string longeststringwithEOW(){
+        string ans = "";
+        longesthelper(root, ans, "");
+
+        return ans;
+    }
 };
 
 //-------------shortest unique prefix problem---------------
@@ -116,11 +140,29 @@ int countuniqueSubstr(string str){
      return trie.countNodes();
 }
 
-int main(){
-    string str = "ababa";
-    cout << countuniqueSubstr(str) << endl;
-    return 0;
+string longeststring(vector<string> dict){
+    Trie trie;
+
+    for (int i=0; i<dict.size(); i++){
+        trie.insert(dict[i]);
+    }
+
+    return trie.longeststringwithEOW();
+
 }
+
+int main(){
+    vector<string> dict = {"a", "banana", "app", "appl", "ap", "apply", "apple"};
+    cout << longeststring(dict) << endl;
+    return 0;
+
+}
+
+// int main(){
+//     string str = "ababa";
+//     cout << countuniqueSubstr(str) << endl;
+//     return 0;
+// }
 
 // int main(){
 //     vector<string> dict = {"zebra", "dog", "duck", "dove"};
