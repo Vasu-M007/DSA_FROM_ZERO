@@ -7,156 +7,156 @@ using namespace std;
 
 //---------------------search, insert, build trie--------------
 
-class Node{
-public:
-    unordered_map<char, Node*> children;
-    bool endofword;
-    int freq; 
+// class Node{
+// public:
+//     unordered_map<char, Node*> children;
+//     bool endofword;
+//     int freq; 
 
-    Node(){
-        endofword = false;
-    }
-};
+//     Node(){
+//         endofword = false;
+//     }
+// };
 
-class Trie{
-    Node* root;
-public:
-    Trie(){
-        root = new Node();
-        root->freq = -1;
-    }
+// class Trie{
+//     Node* root;
+// public:
+//     Trie(){
+//         root = new Node();
+//         root->freq = -1;
+//     }
 
-    void insert(string key){
-        Node* temp = root;
+//     void insert(string key){
+//         Node* temp = root;
 
-        for (int i=0; i<key.size(); i++){
-            if (temp->children.count(key[i]) == 0){
-                temp->children[key[i]] = new Node(); //create an empty node for children
-                temp->children[key[i]]->freq = 1;
-            }
-            else{
-                temp->children[key[i]]->freq++;
-            }
-            temp = temp->children[key[i]];
-        }
+//         for (int i=0; i<key.size(); i++){
+//             if (temp->children.count(key[i]) == 0){
+//                 temp->children[key[i]] = new Node(); //create an empty node for children
+//                 temp->children[key[i]]->freq = 1;
+//             }
+//             else{
+//                 temp->children[key[i]]->freq++;
+//             }
+//             temp = temp->children[key[i]];
+//         }
 
-        temp->endofword = true;
-    }
+//         temp->endofword = true;
+//     }
 
-    bool search(string key){
-        Node* temp = root;
+//     bool search(string key){
+//         Node* temp = root;
 
-        for (int i=0; i<key.size(); i++){
-            if (temp->children.count(key[i])){
-                temp = temp->children[key[i]];
-            } else{
-                return false;
-            }  
-        }
+//         for (int i=0; i<key.size(); i++){
+//             if (temp->children.count(key[i])){
+//                 temp = temp->children[key[i]];
+//             } else{
+//                 return false;
+//             }  
+//         }
 
-        return temp->endofword;
-    }
+//         return temp->endofword;
+//     }
 
-    string getprefix(string key){
-        Node* temp = root;
-        string prefix = "";
+//     string getprefix(string key){
+//         Node* temp = root;
+//         string prefix = "";
 
-        for (int i=0; i<key.size(); i++){
-            prefix += key[i];
-            if (temp->children[key[i]]->freq == 1){
-                return prefix;
-            }
+//         for (int i=0; i<key.size(); i++){
+//             prefix += key[i];
+//             if (temp->children[key[i]]->freq == 1){
+//                 return prefix;
+//             }
 
-            temp = temp->children[key[i]];
-        }
-        return prefix;
-    }
+//             temp = temp->children[key[i]];
+//         }
+//         return prefix;
+//     }
 
-    int countHelper(Node* root){
-        int ans = 0;
+//     int countHelper(Node* root){
+//         int ans = 0;
 
-        for(pair<char, Node*> child : root->children){
-            ans += countHelper(child.second);
-        }
+//         for(pair<char, Node*> child : root->children){
+//             ans += countHelper(child.second);
+//         }
 
-        return ans + 1;
-    }
+//         return ans + 1;
+//     }
 
-    //--------node counter for count unique substr problem----------
+//     //--------node counter for count unique substr problem----------
 
-    int countNodes(){
-        return countHelper(root);
-    }
+//     int countNodes(){
+//         return countHelper(root);
+//     }
 
-    //----------helper and function for longest word with all prefixes problem----
+//     //----------helper and function for longest word with all prefixes problem----
 
-    void longesthelper(Node* root, string &ans, string temp){
-        for (pair<char, Node*> child : root->children){
-            if (child.second->endofword){
-                temp += child.first;
+//     void longesthelper(Node* root, string &ans, string temp){
+//         for (pair<char, Node*> child : root->children){
+//             if (child.second->endofword){
+//                 temp += child.first;
 
-                if ((temp.size() == ans.size() && temp < ans) || temp.size() > ans.size()){
-                    ans = temp;
-                }
+//                 if ((temp.size() == ans.size() && temp < ans) || temp.size() > ans.size()){
+//                     ans = temp;
+//                 }
 
-                longesthelper(child.second, ans, temp);
-                temp = temp.substr(0, temp.size() - 1);
-            }
-        }
-    }
+//                 longesthelper(child.second, ans, temp);
+//                 temp = temp.substr(0, temp.size() - 1);
+//             }
+//         }
+//     }
 
-    string longeststringwithEOW(){
-        string ans = "";
-        longesthelper(root, ans, "");
+//     string longeststringwithEOW(){
+//         string ans = "";
+//         longesthelper(root, ans, "");
 
-        return ans;
-    }
-};
+//         return ans;
+//     }
+// };
 
-//-------------shortest unique prefix problem---------------
+// //-------------shortest unique prefix problem---------------
 
-void prefixproblem(vector<string> dict){
-    Trie trie;
+// void prefixproblem(vector<string> dict){
+//     Trie trie;
 
-    for (int i=0; i<dict.size(); i++){
-        trie.insert(dict[i]);
-    }
+//     for (int i=0; i<dict.size(); i++){
+//         trie.insert(dict[i]);
+//     }
 
-    for (int i=0; i<dict.size(); i++){
-        cout << trie.getprefix(dict[i]) << " " << endl;
-    }
-}
+//     for (int i=0; i<dict.size(); i++){
+//         cout << trie.getprefix(dict[i]) << " " << endl;
+//     }
+// }
 
-//---------count unique no of substrings using prefixes of suffix method----
+// //---------count unique no of substrings using prefixes of suffix method----
 
-int countuniqueSubstr(string str){
-    Trie trie;
-     for (int i=0; i<str.size(); i++){
+// int countuniqueSubstr(string str){
+//     Trie trie;
+//      for (int i=0; i<str.size(); i++){
 
-        string suffix = str.substr(i);
-        trie.insert(suffix);
-     }
+//         string suffix = str.substr(i);
+//         trie.insert(suffix);
+//      }
 
-     return trie.countNodes();
-}
+//      return trie.countNodes();
+// }
 
-string longeststring(vector<string> dict){
-    Trie trie;
+// string longeststring(vector<string> dict){
+//     Trie trie;
 
-    for (int i=0; i<dict.size(); i++){
-        trie.insert(dict[i]);
-    }
+//     for (int i=0; i<dict.size(); i++){
+//         trie.insert(dict[i]);
+//     }
 
-    return trie.longeststringwithEOW();
+//     return trie.longeststringwithEOW();
 
-}
+// }
 
-int main(){
-    vector<string> dict = {"a", "banana", "app", "appl", "ap", "apply", "apple"};
-    cout << longeststring(dict) << endl;
-    return 0;
+// int main(){
+//     vector<string> dict = {"a", "banana", "app", "appl", "ap", "apply", "apple"};
+//     cout << longeststring(dict) << endl;
+//     return 0;
 
-}
+// }
 
 // int main(){
 //     string str = "ababa";
@@ -183,3 +183,71 @@ int main(){
 //     cout << trie.search("there") << endl;
 //     return 0;
 // }
+
+//-----------max xor of two elements in an array---------
+
+struct Node{
+    Node* links[2];
+    bool containsKey(int bit){
+        return (links[bit] != NULL);
+    }
+
+    Node* get(int bit){
+        return links[bit];
+    }
+
+    void put(int bit, Node* node){
+        links[bit] = node;
+    }
+};
+
+class Trie{
+private:
+    Node* root;
+public:
+    Trie(){
+        root = new Node();
+    }
+
+    void insert(int num){
+        Node* node = root;
+        for (int i=31; i>=0; i--){
+            int bit = (num >> i) & 1;
+            if (!node->containsKey(bit)){
+                node->put(bit, new Node());
+            }
+
+            node = node->get(bit);
+        }
+    }
+public:
+    int getmax(int num){
+        Node* node = root;
+        int maxnum = 0;
+        for (int i=31; i>=0; i--){
+            int bit = (num>>i) & 1;
+
+            if (node->containsKey(1-bit)){
+                maxnum = maxnum | (1 << i);
+                node = node->get(1 - bit);
+            }
+            else{
+                node = node->get(bit);
+            }
+        }
+        return maxnum;
+    }
+};
+
+int maxXOR(int n, int m, vector<int> &arr1, vector<int> &arr2){
+    Trie trie;
+    for (auto &it : arr1){
+        trie.insert(it);
+    }
+
+    int maxi = 0;
+    for (auto &it : arr2){
+        maxi = max(maxi, trie.getmax(it));
+    }
+    return maxi;
+}
